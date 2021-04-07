@@ -8,7 +8,7 @@ mutable struct HKAgent &lt;: AbstractAgent
     new_opinion::Float64
     previous_opinon::Float64
 end</code></pre><p>There is a reason the agent has three fields that are &quot;the same&quot;. The <code>old_opinion</code> is used for the synchronous agent update, since we require access to a property&#39;s value at the start of the step and the end of the step. The <code>previous_opinion</code> is the opinion of the agent in the <em>previous</em> step, as the model termination requires access to a property&#39;s value at the end of the previous step, and the end of the current step.</p><p>We could, alternatively, make the three opinions a single field with vector value.</p><pre><code class="language-julia">function hk_model(; numagents = 100, ϵ = 0.2)
-    model = ABM(HKAgent, scheduler = fastest, properties = Dict(:ϵ =&gt; ϵ))
+    model = ABM(HKAgent, scheduler = schedule_fastest, properties = Dict(:ϵ =&gt; ϵ))
     for i in 1:numagents
         o = rand(model.rng)
         add_agent!(model, o, o, -1)
@@ -18,7 +18,7 @@ end
 
 model = hk_model()</code></pre><pre class="documenter-example-output">AgentBasedModel with 100 agents of type HKAgent
  no space
- scheduler: fastest
+ scheduler: schedule_fastest
  properties: Dict(:ϵ =&gt; 0.2)</pre><p>Add some helper functions for the update rule. As there is a filter in the rule we implement it outside the <code>agent_step!</code> method. Notice that the filter is applied to the <code>:old_opinion</code> field.</p><pre><code class="language-julia">function boundfilter(agent, model)
     filter(
         j -&gt; abs(agent.old_opinion - j) &lt; model.ϵ,
@@ -1349,4 +1349,4 @@ figure</code></pre><img src='data:image/svg+xml;utf-8,<?xml version="1.0" encodi
 <path style="fill:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%25,0%25,0%25);stroke-opacity:1;stroke-miterlimit:10;" d="M 570 532.5 L 570 436.5 "/>
 </g>
 </svg>
-'/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../wright-fisher/">« Wright-Fisher model of evolution</a><a class="docs-footer-nextpage" href="../flock/">Flocking »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 6 April 2021 09:38">Tuesday 6 April 2021</span>. Using Julia version 1.6.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+'/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../wright-fisher/">« Wright-Fisher model of evolution</a><a class="docs-footer-nextpage" href="../flock/">Flocking »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Wednesday 7 April 2021 19:47">Wednesday 7 April 2021</span>. Using Julia version 1.6.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
